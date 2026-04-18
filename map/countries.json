@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { 
+      "type": "Feature", 
+      "properties": { 
+        "name": "Taiwan", 
+        "description": "Tatun Volcanic Group / Penghu / Lutao / Lanyu" 
+      }, 
+      "geometry": { 
+        "type": "Point", 
+        "coordinates": [121.56, 25.20]
+      } 
+    },
+    { 
+      "type": "Feature", 
+      "properties": { 
+        "name": "Japan", 
+        "description": "Izu-Oshima / Aso" 
+      }, 
+      "geometry": { 
+        "type": "Point", 
+        "coordinates": [139.76, 35.97]
+      } 
+    },
+    { 
+      "type": "Feature", 
+      "properties": { 
+        "name": "Italy", 
+        "description": "Etna / Stromboli / Vulcano / Lipari" 
+      }, 
+      "geometry": { 
+        "type": "Point", 
+        "coordinates": [15.02, 37.60]
+      } 
+    },
+        { 
+      "type": "Feature", 
+      "properties": { 
+        "name": "New Zealand", 
+        "description": "Auckland volcanic field / Tongariro / Taranaki" 
+      }, 
+      "geometry": { 
+        "type": "Point", 
+        "coordinates": [174.77, -36.85]
+      } 
+    }
+  ]
+}
