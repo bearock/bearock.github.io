@@ -17,6 +17,8 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
         <script src="js/scripts.js"></script>
+        <!-- MapLibre -->
+        <link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -42,23 +44,35 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <h1 class="mb-0">
-                        Alex Wei-Che Li <br> 李維哲
-                    </h1>
-                    <div class="subheading mb-5">
-                    </div>
-                    <div class="lead mb-5">
-                        Phone: <a target="_blank" style="color:#38686a;"> (+886) 963877331  </a>
-                    <br>
-                        Email: <a href="mailto:alexlee613@gmail.com" target="_blank" style="color:#38686a;"> alexlee613@gmail.com </a>
-                    </div>       
-                    <a style="font-size:24px" href="https://drive.google.com/file/d/1GnQ9wHOwMEIj0L0rkSc7isMafZeGld2I/view">My CV</a>
-                    <p></p>
-                    <div class="social-icons">
-                        <a class="social-icon" href="https://www.instagram.com/alexlee_bear"><i class="fab fa-instagram"></i></a>
-                        <a class="social-icon" href="https://www.facebook.com/li.wei.zhe.533370"><i class="fab fa-facebook-f"></i></a>
-                        <a class="social-icon" href="https://www.youtube.com/@geothe5722"><i class="fab fa-youtube"></i></a>
-                    </div>
+                    <div class="row align-items-center">
+                        <!-- 左區塊 -->
+                        <div class="col-lg-6">
+                            <h1 class="mb-0">
+                                Alex Wei-Che Li <br> 
+                                <span class="text-primary">李維哲</span>
+                            </h1>
+                            <div class="subheading mb-5"></div>
+                            <div class="lead mb-5">
+                                Phone: <a href="tel:+886963877331" target="_blank" style="color:#38686a; text-decoration: none;"> (+886) 963877331 </a><br>
+                                Email: <a href="mailto:alexlee613@gmail.com" target="_blank" style="color:#38686a; text-decoration: none;"> alexlee613@gmail.com </a>
+                            </div>
+                            <div class="mb-5">
+                                <a class="btn btn-outline-secondary" style="font-size:20px; border-radius: 50px; padding: 10px 25px;" href="https://drive.google.com/file/d/1GnQ9wHOwMEIj0L0rkSc7isMafZeGld2I/view" target="_blank">
+                                    <i class="fas fa-file-download me-2"></i>My CV
+                                </a>
+                            </div>
+                            <div class="social-icons">
+                                <a class="social-icon" href="https://www.instagram.com/alexlee_bear" target="_blank"><i class="fab fa-instagram"></i></a>
+                                <a class="social-icon" href="https://www.facebook.com/li.wei.zhe.533370" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                <a class="social-icon" href="https://www.youtube.com/@geothe5722" target="_blank"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                        <!-- 右地圖 -->
+                        <div class="col-lg-6 mt-5 mt-lg-0">
+                            <div id="map" style="width: 100%; height: 450px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border: 1px solid #eee;"></div>
+                            <p class="text-muted mt-2 text-end" style="font-size: 0.8rem;"><i>* My Volcano Experience (Interactive Map)</i></p>
+                        </div>
+                    </div> 
                 </div>
             </section>
             <hr class="m-0" />
@@ -180,5 +194,8 @@
                 </div>
             </section>
         </div>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+    <script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+    <script src="map/script.js"></script>
     </body>
 </html>

@@ -7,20 +7,30 @@ const app = createApp({
 
         onMounted(() => {
 
+            const isRoot = !window.location.pathname.includes('/map/');
+            const jsonPath = isRoot ? 'map/countries.json' : 'countries.json';
+
+            // 初始化 MapLibre (ref/ID)
+            const el = mapContainer.value || document.getElementById('map');
+            if (!el) return;
+
             // 手機高度適應
             const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
             
-            // 初始化 MapLibre
+            // new Map
             map = new maplibregl.Map({
-                container: mapContainer.value, 
+                container: el, 
                 style: 'https://tiles.openfreemap.org/styles/bright',
-                center: [121, 23],
+                center: [90, 25],
                 zoom: 0,
                 minZoom: 0,
                 maxZoom: 0,
-                renderWorldCopies: false,
+
+                renderWorldCopies: true,
                 dragRotate: false,
+                scrollWheelZoom: false,
+                doubleClickZoom: false,
                 touchZoomRotate: false,
             });
 
@@ -28,7 +38,7 @@ const app = createApp({
                 // 定義點位資料
                 map.addSource('countries', {
                     'type': 'geojson',
-                    'data': './countries.json' // 直接指向外部檔案
+                    'data': jsonPath
                 });
 
                 // 套曡點位
@@ -44,7 +54,6 @@ const app = createApp({
                     }
                 });
 
-                // popup
                 // map.on('click', 'country-points', (e) => {
                 //     const feature = e.features[0];
                 //     new maplibregl.Popup()
@@ -53,7 +62,7 @@ const app = createApp({
                 //         .addTo(map);
                 // });
 
-                // Create a popup, but don't add it to the map yet.
+                // Popup
                 const popup = new maplibregl.Popup({
                     closeButton: false,
                     closeOnClick: false
@@ -100,4 +109,7 @@ const app = createApp({
     }
 });
 
-app.mount('#app');
+const mountEl = document.getElementById('page-top') || document.getElementById('app');
+if (mountEl) {
+    app.mount(mountEl);
+}
