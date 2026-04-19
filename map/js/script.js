@@ -67,8 +67,8 @@ const app = createApp({
 
         onMounted(() => {
             const isRoot = !window.location.pathname.includes('/map/');
-            const jsonPath = isRoot ? 'map/countries.json' : 'countries.json';
-            const svgPath = isRoot ? 'map/assets/volcano-icon.svg' : 'assets/volcano-icon.svg';
+            const jsonPath = isRoot ? 'map/countries.json' : './countries.json';
+            const svgPath = isRoot ? 'map/assets/volcano-icon.svg' : './assets/volcano-icon.svg';
 
             // 初始化 MapLibre (ref/ID)
             const el = mapContainer.value || document.getElementById('map');
@@ -158,7 +158,7 @@ const app = createApp({
                         const slug = feature.properties.slug;
                         if (slug) {
                             const pageLocation = `excursions/${slug}.html`;
-                            const targetUrl = isRoot ? `map/${pageLocation}` : `${pageLocation}`;
+                            const targetUrl = isRoot ? `map/${pageLocation}` : `./${pageLocation}`;
                             window.open(targetUrl, '_blank');
                         }
                     });
