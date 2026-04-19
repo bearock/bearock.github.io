@@ -28,10 +28,14 @@ const app = createApp({
                 maxZoom: 0,
 
                 renderWorldCopies: true,
+
                 dragRotate: false,
-                scrollWheelZoom: false,
-                doubleClickZoom: false,
+                touchPitch: false,
                 touchZoomRotate: false,
+                keyboard: false,
+                boxZoom: false,
+                doubleClickZoom: false,
+                scrollZoom: false
             });
 
             map.on('load', () => {
