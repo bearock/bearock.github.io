@@ -5,10 +5,71 @@ const app = createApp({
         const mapContainer = ref(null);
         let map = null;
 
+        async function loadAndSetupIconLayer(mapInstance, url, iconName) {
+            if (!mapInstance.getSource('countries')) {
+                return;
+            }
+
+            try {
+                const response = await fetch(url);
+                
+                // 若 HTTP 狀態不是 2xx，直接丟出錯誤進入 catch
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                let svgText = await response.text();
+                const themeColor = '#d30000';
+                svgText = svgText.replace(/fill="[^"]*"/g, `fill="${themeColor}" stroke="#000000" stroke-width="0.5"`);
+                const blob = new Blob([svgText], { type: 'image/svg+xml;charset=utf-8' });
+                const objectUrl = URL.createObjectURL(blob);
+
+                const img = new Image();
+                img.onload = () => {
+                    if (!mapInstance.hasImage(iconName)) {
+                        mapInstance.addImage(iconName, img);
+                    }
+
+                    // SVG 成功
+                    mapInstance.addLayer({
+                        'id': 'country-points',
+                        'type': 'symbol',
+                        'source': 'countries',
+                        'layout': {
+                            'icon-image': iconName,
+                            'icon-size': 0.3,
+                            'icon-allow-overlap': true
+                        }
+                    });
+                    URL.revokeObjectURL(objectUrl);
+                };
+                img.onerror = () => { throw new Error("SVG 解碼失敗"); };
+                img.src = objectUrl;
+
+            } catch (err) {
+                // 備案
+                console.warn("⚠️ SVG 改用圓點圖層", err.message);
+                
+                // 確保不要重複添加同 ID 的圖層
+                if (!mapInstance.getLayer('country-points-fallback')) {
+                    mapInstance.addLayer({
+                        'id': 'country-points-fallback',
+                        'type': 'circle',
+                        'source': 'countries',
+                        'paint': {
+                            'circle-radius': 8,
+                            'circle-color': '#d10000',
+                            'circle-stroke-width': 2,
+                            'circle-stroke-color': '#ffffff'
+                        }
+                    });
+                }
+            }
+        }
+
         onMounted(() => {
 
             const isRoot = !window.location.pathname.includes('/map/');
             const jsonPath = isRoot ? 'map/countries.json' : 'countries.json';
+            const svgPath = isRoot ? 'map/assets/volcano-icon.svg' : 'assets/volcano-icon.svg';
 
             // 初始化 MapLibre (ref/ID)
             const el = mapContainer.value || document.getElementById('map');
@@ -38,7 +99,7 @@ const app = createApp({
                 scrollZoom: false
             });
 
-            map.on('load', () => {
+            map.on('load', async () => {
                 // 定義點位資料
                 map.addSource('countries', {
                     'type': 'geojson',
@@ -46,17 +107,8 @@ const app = createApp({
                 });
 
                 // 套曡點位
-                map.addLayer({
-                    'id': 'country-points',
-                    'type': 'circle',
-                    'source': 'countries',
-                    'paint': {
-                        'circle-radius': 12,
-                        'circle-color': '#4A90E2',
-                        'circle-stroke-width': 2,
-                        'circle-stroke-color': '#fff'
-                    }
-                });
+                await loadAndSetupIconLayer(map, svgPath, 'volcano-icon');  
+                const countryPointsLayers = ['country-points', 'country-points-fallback'];
 
                 // map.on('click', 'country-points', (e) => {
                 //     const feature = e.features[0];
@@ -75,38 +127,40 @@ const app = createApp({
                 // Make sure to detect marker change for overlapping markers
                 // and use mousemove instead of mouseenter event
                 let currentFeatureCoordinates = undefined;
-                map.on('mousemove', 'country-points', (e) => {
-                    const featureCoordinates = e.features[0].geometry.coordinates.toString();
-                    if (currentFeatureCoordinates !== featureCoordinates) {
-                        currentFeatureCoordinates = featureCoordinates;
+                countryPointsLayers.forEach(layerId => {
+                    map.on('mousemove', layerId, (e) => {
+                        const featureCoordinates = e.features[0].geometry.coordinates.toString();
+                        if (currentFeatureCoordinates !== featureCoordinates) {
+                            currentFeatureCoordinates = featureCoordinates;
 
-                        // Change the cursor style as a UI indicator.
-                        map.getCanvas().style.cursor = 'pointer';
+                            // Change the cursor style as a UI indicator.
+                            map.getCanvas().style.cursor = 'pointer';
 
-                        const coordinates = e.features[0].geometry.coordinates.slice();
-                        const countryName = e.features[0].properties.name;
-                        const description = e.features[0].properties.description;
+                            const coordinates = e.features[0].geometry.coordinates.slice();
+                            const countryName = e.features[0].properties.name;
+                            const description = e.features[0].properties.description;
 
-                        // Ensure that if the map is zoomed out such that multiple
-                        // copies of the feature are visible, the popup appears
-                        // over the copy being pointed to.
-                        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
-                            coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                            // Ensure that if the map is zoomed out such that multiple
+                            // copies of the feature are visible, the popup appears
+                            // over the copy being pointed to.
+                            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                            }
+
+                            
+                            // Populate the popup and set its coordinates
+                            // based on the feature found.
+                            popup.setLngLat(coordinates)
+                            .setHTML(`<strong>${countryName}:</strong> ${description}`)
+                            .addTo(map);
                         }
+                    });
 
-                        
-                        // Populate the popup and set its coordinates
-                        // based on the feature found.
-                        popup.setLngLat(coordinates)
-                        .setHTML(`<strong>${countryName}:</strong> ${description}`)
-                        .addTo(map);
-                    }
-                });
-
-                map.on('mouseleave', 'country-points', () => {
-                    currentFeatureCoordinates = undefined;
-                    map.getCanvas().style.cursor = '';
-                    popup.remove();
+                    map.on('mouseleave', layerId, () => {
+                        currentFeatureCoordinates = undefined;
+                        map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    });
                 });
             });
         });
