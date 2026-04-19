@@ -5,6 +5,7 @@
       "type": "Feature", 
       "properties": { 
         "name": "Taiwan", 
+        "slug": "taiwan", 
         "description": "Tatun Volcanic Group / Penghu / Lutao / Lanyu" 
       }, 
       "geometry": { 
@@ -16,6 +17,7 @@
       "type": "Feature", 
       "properties": { 
         "name": "Japan", 
+        "slug": "japan", 
         "description": "Izu-Oshima / Aso" 
       }, 
       "geometry": { 
@@ -27,6 +29,7 @@
       "type": "Feature", 
       "properties": { 
         "name": "Italy", 
+        "slug": "Italy", 
         "description": "Etna / Stromboli / Vulcano / Lipari" 
       }, 
       "geometry": { 
@@ -38,6 +41,7 @@
       "type": "Feature", 
       "properties": { 
         "name": "New Zealand", 
+        "slug": "new-zealand",  
         "description": "Auckland volcanic field / Tongariro / Taranaki" 
       }, 
       "geometry": { 

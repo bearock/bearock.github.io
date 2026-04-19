@@ -12,10 +12,10 @@ const app = createApp({
 
             try {
                 const response = await fetch(url);
-                
+
                 // 若 HTTP 狀態不是 2xx，直接丟出錯誤進入 catch
                 if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                
+
                 let svgText = await response.text();
                 const themeColor = '#d30000';
                 svgText = svgText.replace(/fill="[^"]*"/g, `fill="${themeColor}" stroke="#000000" stroke-width="0.5"`);
@@ -47,7 +47,7 @@ const app = createApp({
             } catch (err) {
                 // 備案
                 console.warn("⚠️ SVG 改用圓點圖層", err.message);
-                
+
                 // 確保不要重複添加同 ID 的圖層
                 if (!mapInstance.getLayer('country-points-fallback')) {
                     mapInstance.addLayer({
@@ -66,7 +66,6 @@ const app = createApp({
         }
 
         onMounted(() => {
-
             const isRoot = !window.location.pathname.includes('/map/');
             const jsonPath = isRoot ? 'map/countries.json' : 'countries.json';
             const svgPath = isRoot ? 'map/assets/volcano-icon.svg' : 'assets/volcano-icon.svg';
@@ -78,10 +77,10 @@ const app = createApp({
             // 手機高度適應
             const vh = window.innerHeight * 0.01;
             document.documentElement.style.setProperty('--vh', `${vh}px`);
-            
+
             // new Map
             map = new maplibregl.Map({
-                container: el, 
+                container: el,
                 style: 'https://tiles.openfreemap.org/styles/bright',
                 center: [90, 25],
                 zoom: 0,
@@ -107,16 +106,8 @@ const app = createApp({
                 });
 
                 // 套曡點位
-                await loadAndSetupIconLayer(map, svgPath, 'volcano-icon');  
+                await loadAndSetupIconLayer(map, svgPath, 'volcano-icon');
                 const countryPointsLayers = ['country-points', 'country-points-fallback'];
-
-                // map.on('click', 'country-points', (e) => {
-                //     const feature = e.features[0];
-                //     new maplibregl.Popup()
-                //         .setLngLat(feature.geometry.coordinates)
-                //         .setHTML(`<strong>${feature.properties.description}</strong>`)
-                //         .addTo(map);
-                // });
 
                 // Popup
                 const popup = new maplibregl.Popup({
@@ -147,12 +138,11 @@ const app = createApp({
                                 coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                             }
 
-                            
                             // Populate the popup and set its coordinates
                             // based on the feature found.
                             popup.setLngLat(coordinates)
-                            .setHTML(`<strong>${countryName}:</strong> ${description}`)
-                            .addTo(map);
+                                .setHTML(`<strong>${countryName}:</strong> ${description}`)
+                                .addTo(map);
                         }
                     });
 
@@ -160,6 +150,17 @@ const app = createApp({
                         currentFeatureCoordinates = undefined;
                         map.getCanvas().style.cursor = '';
                         popup.remove();
+                    });
+
+                    // 點擊跳轉新頁面
+                    map.on('click', layerId, (e) => {
+                        const feature = e.features[0];
+                        const slug = feature.properties.slug;
+                        if (slug) {
+                            const pageLocation = `excursions/${slug}.html`;
+                            const targetUrl = isRoot ? `map/${pageLocation}` : `${pageLocation}`;
+                            window.open(targetUrl, '_blank');
+                        }
                     });
                 });
             });
