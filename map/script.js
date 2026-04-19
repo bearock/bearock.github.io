@@ -84,6 +84,7 @@ const app = createApp({
                         map.getCanvas().style.cursor = 'pointer';
 
                         const coordinates = e.features[0].geometry.coordinates.slice();
+                        const countryName = e.features[0].properties.name;
                         const description = e.features[0].properties.description;
 
                         // Ensure that if the map is zoomed out such that multiple
@@ -93,9 +94,12 @@ const app = createApp({
                             coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
                         }
 
+                        
                         // Populate the popup and set its coordinates
                         // based on the feature found.
-                        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                        popup.setLngLat(coordinates)
+                        .setHTML(`<strong>${countryName}:</strong> ${description}`)
+                        .addTo(map);
                     }
                 });
 
