@@ -1,0 +1,126 @@
+/* map/css/excursion.css */
+
+:root {
+    --primary-color: #38686a;
+    --accent-color: #e67e22;
+    --bg-color: #f4f7f6;
+    --card-bg: #ffffff;
+    --text-main: #2c3e50;
+    --text-muted: #666666;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    line-height: 1.8;
+    color: var(--text-main);
+    background-color: var(--bg-color);
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* 國家大標 */
+.country-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.country-header h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.country-header .date {
+    font-weight: bold;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+}
+
+/* 地點小標 */
+.location-section {
+    border-left: 5px solid var(--primary-color);
+    background: #e9eeed;
+    padding: 10px 20px;
+    margin: 40px 0 25px 0;
+    border-radius: 0 4px 4px 0;
+}
+
+.location-section h2 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--text-main);
+}
+
+/* 手機版標題兼容 */
+@media (max-width: 768px) {
+    .location-section {
+        padding: 8px 15px; /* 稍微縮小內距 */
+    }
+    .location-section h2 {
+        font-size: 1.15rem; /* 縮小字體以適應手機寬度 */
+    }
+}
+
+/* 相簿網格 */
+.gallery-grid {
+    display: grid;
+    gap: 30px;
+    grid-template-columns: 1fr; /* 手機預設一欄 */
+}
+
+@media (min-width: 768px) {
+    .gallery-grid {
+        grid-template-columns: repeat(2, 1fr); /* 電腦兩欄 */
+    }
+}
+
+/* 照片卡片 */
+.photo-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.photo-card:hover {
+    transform: translateY(-5px);
+}
+
+.photo-container {
+    width: 100%;
+    aspect-ratio: 3 / 2; /* 最接近原始比例 (2048:1361) */
+    overflow: hidden;
+    background-color: #ddd;
+}
+
+.photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 關鍵：自動裁切填充 */
+    display: block;
+    cursor: zoom-in;
+}
+
+.photo-caption {
+    padding: 15px 20px;
+    font-size: 0.95rem;
+    color: var(--text-main);
+    border-top: 1px solid #eee;
+}
+
+/* 返回按鈕 */
+.back-btn {
+    display: inline-block;
+    margin-top: 60px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: bold;
+    transition: color 0.2s;
+}
+
+.back-btn:hover {
+    color: var(--accent-color);
+}

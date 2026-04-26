@@ -29,7 +29,7 @@
       "type": "Feature", 
       "properties": { 
         "name": "Italy", 
-        "slug": "Italy", 
+        "slug": "italy", 
         "description": "Etna / Stromboli / Vulcano / Lipari" 
       }, 
       "geometry": { 
