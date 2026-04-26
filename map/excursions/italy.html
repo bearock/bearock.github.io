@@ -1,1 +1,138 @@
-Italy page
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Italy | Volcano Excursion</title>
+
+    <link rel="stylesheet" href="../css/excursion.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <header class="country-header">
+            <h1>{{ countryName }}</h1>
+            <p class="date">{{ tripDate }}</p>
+        </header>
+
+        <!-- 使用 v-for 遍歷各個地點區塊 -->
+        <div v-for="section in sections" :key="section.title">
+            <div class="location-section">
+                <h2>{{ section.title }}</h2>
+            </div>
+
+            <div class="gallery-grid">
+                <!-- 使用 v-for 遍歷該地點的所有照片 -->
+                <div class="photo-card" v-for="photo in section.photos" :key="photo.url">
+                    <div class="photo-container">
+                        <!-- data-description 與下面的 caption 共用 photo.desc -->
+                        <a :href="photo.url" class="glightbox" :data-description="photo.desc">
+                            <img :src="photo.url" :alt="photo.alt">
+                        </a>
+                    </div>
+                    <div class="photo-caption">
+                        {{ photo.desc }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="../index.html" class="back-btn">← Back to Map Explorer</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script>
+        const { createApp, onMounted, nextTick } = Vue;
+
+        createApp({
+            setup() {
+                // --- 填寫資料 ---
+                const countryName = "Italy";
+                const tripDate = "June 2025";
+
+                const sections = [
+                    {
+                        title: "Mt. Etna | June 2025",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/italy/active_se_crater.jpg",
+                                alt: "Active SE crater",
+                                desc: "Active SE crater"
+                            },
+                            {
+                                url: "../../assets/img/excursions/italy/me.jpg",
+                                alt: "Me",
+                                desc: "Me"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Lipari | June 2025",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/italy/tuff_and_marine_terrace.jpg",
+                                alt: "Tuff and marine terrace deposits",
+                                desc: "Tuff and marine terrace deposits"
+                            },
+                            {
+                                url: "../../assets/img/excursions/italy/endogenous_dome.jpg",
+                                alt: "Endogenous dome",
+                                desc: "Endogenous dome"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Vulcano | June 2025",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/italy/crater.jpg",
+                                alt: "Crater",
+                                desc: "Crater"
+                            },
+                            {
+                                url: "../../assets/img/excursions/italy/brea_crust_block.jpg",
+                                alt: "Brea-crust block",
+                                desc: "Brea-crust block"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Stromboli | June 2025",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/italy/lateral_collapse.jpg",
+                                alt: "Lateral collapse",
+                                desc: "Lateral collapse"
+                            },
+                            {
+                                url: "../../assets/img/excursions/italy/strombolian_eruption.jpg",
+                                alt: "Strombolian eruption",
+                                desc: "Strombolian eruption"
+                            }
+                        ]
+                    }
+                ];
+
+                // 當 Vue 渲染完成後，初始化燈箱
+                onMounted(() => {
+                    nextTick(() => {
+                        GLightbox({
+                            selector: '.glightbox',
+                            touchNavigation: true,
+                            descPosition: 'bottom'
+                        });
+                    });
+                });
+
+                return {
+                    countryName,
+                    tripDate,
+                    sections
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
