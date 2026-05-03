@@ -1,1 +1,133 @@
-Taiwan Page
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Taiwan | Volcano Excursion</title>
+
+    <link rel="stylesheet" href="../css/excursion.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <header class="country-header">
+            <h1>{{ countryName }}</h1>
+            <p class="date">{{ tripDate }}</p>
+        </header>
+
+        <!-- 使用 v-for 遍歷各個地點區塊 -->
+        <div v-for="section in sections" :key="section.title">
+            <div class="location-section">
+                <h2>{{ section.title }}</h2>
+            </div>
+
+            <div class="gallery-grid">
+                <!-- 使用 v-for 遍歷該地點的所有照片 -->
+                <div class="photo-card" v-for="photo in section.photos" :key="photo.url">
+                    <div class="photo-container">
+                        <!-- data-description 與下面的 caption 共用 photo.desc -->
+                        <a :href="photo.url" class="glightbox" :data-description="photo.desc">
+                            <img :src="photo.url" :alt="photo.alt">
+                        </a>
+                    </div>
+                    <div class="photo-caption">
+                        {{ photo.desc }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <a href="../../index.html" class="back-btn">← Back to Map Explorer</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+    <script>
+        const { createApp, onMounted, nextTick } = Vue;
+
+        createApp({
+            setup() {
+                // --- 填寫資料 ---
+                const countryName = "Taiwan";
+                const tripDate = "";
+
+                const sections = [
+                    {
+                        title: "Tatun Volcanic Group",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/taiwan/Tatun Volcanic Group/Mt. Cising and fissure.JPG",
+                                alt: "Mt. Cising and fissure",
+                                desc: "Mt. Cising and fissure"
+                            },
+                            {
+                                url: "../../assets/img/excursions/taiwan/Tatun Volcanic Group/Mt. Cising dome complex.JPG",
+                                alt: "Mt. Cising dome complex",
+                                desc: "Mt. Cising dome complex.JPG"
+                            },
+                            {
+                                url: "../../assets/img/excursions/taiwan/Tatun Volcanic Group/Mt. Huangzuei crater.JPG",
+                                alt: "Mt. Huangzuei crater",
+                                desc: "Mt. Huangzuei crater"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Penghu",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/taiwan/Penghu/Alkali basalt overlies tuff.JPG",
+                                alt: "Alkali basalt overlies tuff",
+                                desc: "Alkali basalt overlies tuff"
+                            },
+                            {
+                                url: "../../assets/img/excursions/taiwan/Penghu/Lava flow terrace.JPG",
+                                alt: "Lava flow terrace",
+                                desc: "Lava flow terrace"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Lutao",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/taiwan/Lutao/Lahar deposit.JPG",
+                                alt: "Lahar deposit",
+                                desc: "Lahar deposit"
+                            }
+                        ]
+                    },
+                    {
+                        title: "Lanyu",
+                        photos: [
+                            {
+                                url: "../../assets/img/excursions/taiwan/Lanyu/Volcaniclastic deposit.JPG",
+                                alt: "Volcaniclastic deposit",
+                                desc: "Volcaniclastic deposit"
+                            }
+                        ]
+                    }
+                ];
+
+                // 當 Vue 渲染完成後，初始化燈箱
+                onMounted(() => {
+                    nextTick(() => {
+                        GLightbox({
+                            selector: '.glightbox',
+                            touchNavigation: true,
+                            descPosition: 'bottom'
+                        });
+                    });
+                });
+
+                return {
+                    countryName,
+                    tripDate,
+                    sections
+                }
+            }
+        }).mount('#app');
+    </script>
+</body>
+</html>
